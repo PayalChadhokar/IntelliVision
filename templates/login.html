@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>IntelliVision | Officer Login</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body class="login-page">
+
+<div class="login-screen">
+
+    <!-- =====================================================
+         LEFT BRAND PANEL
+    ====================================================== -->
+
+    <section class="login-left">
+
+        <div class="login-left-inner">
+
+            <!-- FIR ICON -->
+
+            <div class="fir-logo">
+
+                <div class="fir-paper-icon">
+
+                    <strong>FIR</strong>
+
+                    <span></span>
+                    <span></span>
+                    <span class="short"></span>
+
+                </div>
+
+                <div class="fir-check">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <!-- BRAND -->
+
+            <h1>
+                IntelliVision
+            </h1>
+
+            <h2>
+                AI-Assisted FIR Draft Generation System
+            </h2>
+
+            <p class="brand-description">
+                Convert multilingual voice complaints into
+                structured FIR drafts with AI-assisted
+                analysis and officer-controlled review.
+            </p>
+
+
+            <!-- =================================================
+                 FEATURE 1
+            ================================================== -->
+
+            <div class="login-feature">
+
+                <div class="login-feature-icon">
+                    🎙
+                </div>
+
+                <div>
+
+                    <strong>
+                        Voice Complaint
+                    </strong>
+
+                    <span>
+                        Capture the complainant's statement
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FEATURE 2
+            ================================================== -->
+
+            <div class="login-feature">
+
+                <div class="login-feature-icon ai-icon">
+                    AI
+                </div>
+
+                <div>
+
+                    <strong>
+                        Intelligent Analysis
+                    </strong>
+
+                    <span>
+                        Extract and structure complaint information
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 FEATURE 3
+            ================================================== -->
+
+            <div class="login-feature">
+
+                <div class="login-feature-icon fir-icon">
+                    FIR
+                </div>
+
+                <div>
+
+                    <strong>
+                        FIR Draft Generation
+                    </strong>
+
+                    <span>
+                        Generate an editable I.I.F.-I style draft
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="login-status">
+
+                <span class="login-status-dot"></span>
+
+                <span>
+                    AI-Assisted • Human Verified
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         RIGHT LOGIN PANEL
+    ====================================================== -->
+
+    <section class="login-right">
+
+        <div class="login-card">
+
+            <div class="login-label">
+                POLICE OFFICER PORTAL
+            </div>
+
+            <h2>
+                Welcome back
+            </h2>
+
+            <p class="login-description">
+                Sign in to generate and review FIR drafts.
+            </p>
+
+
+            <!-- ERROR -->
+
+            {% if error %}
+
+            <div class="login-error">
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- LOGIN FORM -->
+
+            <form
+                method="POST"
+                action="{{ url_for('auth.login') }}"
+                class="login-form"
+            >
+
+                <div class="login-field">
+
+                    <label for="username">
+                        Officer Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your username"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="login-field">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-submit"
+                >
+
+                    <span>
+                        Sign In
+                    </span>
+
+                    <span class="login-arrow">
+                        →
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- SECURITY -->
+
+            <div class="login-security">
+
+                <span>
+                    🔒
+                </span>
+
+                <span>
+                    Authorized police personnel only
+                </span>
+
+            </div>
+
+
+            <!-- FOOTER -->
+
+            <div class="login-footer">
+
+                <strong>
+                    IntelliVision
+                </strong>
+
+                <span>
+                    •
+                </span>
+
+                <span>
+                    AI-Assisted FIR Draft Generation
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+</body>
+</html>

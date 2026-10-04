@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>FIR History - IntelliVision</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+<div class="page-container">
+
+    <header class="fir-app-header">
+
+        <div>
+
+            <div class="app-brand">
+                IntelliVision
+            </div>
+
+            <div class="app-subtitle">
+                FIR History
+            </div>
+
+        </div>
+
+        <a href="/complaint/new"
+           class="print-btn"
+           style="text-decoration:none;">
+
+            New Complaint
+
+        </a>
+
+    </header>
+
+
+    <main class="history-container">
+
+        <div class="history-title">
+
+            <h1>
+                FIR History
+            </h1>
+
+            <p>
+                View previously generated and approved FIR records.
+            </p>
+
+        </div>
+
+
+        {% if firs %}
+
+        <div class="history-table-wrapper">
+
+            <table class="fir-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            FIR ID
+                        </th>
+
+                        <th>
+                            FIR Number
+                        </th>
+
+                        <th>
+                            Police Station
+                        </th>
+
+                        <th>
+                            District
+                        </th>
+
+                        <th>
+                            Crime Category
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for fir in firs %}
+
+                    <tr>
+
+                        <td>
+                            {{ fir.fir_id }}
+                        </td>
+
+                        <td>
+                            {{ fir.fir_number or "Not Assigned" }}
+                        </td>
+
+                        <td>
+                            {{ fir.police_station }}
+                        </td>
+
+                        <td>
+                            {{ fir.district }}
+                        </td>
+
+                        <td>
+                            {{ fir.crime_category or "-" }}
+                        </td>
+
+                        <td>
+                            {{ fir.draft_status }}
+                        </td>
+
+                        <td>
+                            {{ fir.created_at or "-" }}
+                        </td>
+
+                        <td>
+
+                            <a href="/fir/draft/{{ fir.fir_id }}">
+                                View
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-history">
+
+            <h2>
+                No FIR records available
+            </h2>
+
+            <p>
+                Approved FIR records will appear here.
+            </p>
+
+            <a href="/complaint/new"
+               class="print-btn"
+               style="display:inline-block;text-decoration:none;">
+
+                Create New Complaint
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</div>
+
+</body>
+
+</html>

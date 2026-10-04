@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>IntelliVision | Officer Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body class="dashboard-body">
+
+    <!-- =====================================================
+         TOP HEADER
+    ====================================================== -->
+
+    <header class="dashboard-header">
+
+        <div class="dashboard-brand">
+
+            <div class="dashboard-brand-icon">
+                FIR
+            </div>
+
+            <div class="dashboard-brand-text">
+
+                <div class="dashboard-brand-name">
+                    IntelliVision
+                </div>
+
+                <div class="dashboard-brand-subtitle">
+                    AI-Assisted FIR Draft Generation System
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-user">
+
+            <div class="dashboard-user-info">
+
+                <div class="dashboard-user-name">
+                    {{ session.get('officer_name', 'Rahul Patil') }}
+                </div>
+
+                <div class="dashboard-user-role">
+                    {{ session.get('officer_rank', 'Police Inspector') }}
+                </div>
+
+            </div>
+
+
+            <a
+                href="{{ url_for('auth.logout') }}"
+                class="dashboard-logout"
+            >
+                Logout
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN DASHBOARD
+    ====================================================== -->
+
+    <main class="dashboard-main">
+
+        <!-- PAGE INTRO -->
+
+        <section class="dashboard-intro">
+
+            <div class="dashboard-eyebrow">
+                OFFICER DASHBOARD
+            </div>
+
+            <h1>
+                Welcome,
+                {{ session.get('officer_name', 'Rahul Patil') }}
+            </h1>
+
+            <p>
+                Create, review and manage AI-assisted FIR drafts
+                from complainant statements.
+            </p>
+
+        </section>
+
+
+        <!-- =================================================
+             POLICE STATION SUMMARY
+        ================================================== -->
+
+        <section class="station-card">
+
+            <div class="station-left">
+
+                <div class="station-icon">
+                    FIR
+                </div>
+
+                <div class="station-details">
+
+                    <div class="station-label">
+                        CURRENT POLICE STATION
+                    </div>
+
+                    <div class="station-name">
+                        Hingna Police Station
+                    </div>
+
+                    <div class="station-location">
+                        Nagpur City, Maharashtra
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="station-status">
+
+                <span class="status-dot"></span>
+
+                <span>
+                    System Active
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FIR PROCESSING
+        ================================================== -->
+
+        <section class="dashboard-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    FIR Processing
+                </h2>
+
+                <p>
+                    Start a new complaint or review previously
+                    approved FIR records.
+                </p>
+
+            </div>
+
+
+            <div class="processing-grid">
+
+                <!-- NEW COMPLAINT -->
+
+                <a
+                    href="{{ url_for('complaint.new_complaint') }}"
+                    class="processing-card processing-card-primary"
+                >
+
+                    <div class="processing-icon microphone-icon">
+                        🎙
+                    </div>
+
+
+                    <div class="processing-content">
+
+                        <h3>
+                            New Complaint
+                        </h3>
+
+                        <p>
+                            Record a complainant's statement
+                            through voice and begin FIR draft
+                            generation.
+                        </p>
+
+                    </div>
+
+
+                    <div class="processing-arrow">
+                        →
+                    </div>
+
+                </a>
+
+
+                <!-- FIR HISTORY -->
+
+                <a
+                    href="{{ url_for('officer.history') }}"
+                    class="processing-card processing-card-history"
+                >
+
+                    <div class="processing-icon history-icon">
+                        ▤
+                    </div>
+
+
+                    <div class="processing-content">
+
+                        <h3>
+                            FIR History
+                        </h3>
+
+                        <p>
+                            View previously approved FIRs and
+                            their registration details.
+                        </p>
+
+                        <span class="history-note">
+                            Available after FIR approval
+                        </span>
+
+                    </div>
+
+
+                    <div class="processing-arrow">
+                        →
+                    </div>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             LOWER DASHBOARD AREA
+        ================================================== -->
+
+        <div class="dashboard-lower-grid">
+
+            <!-- =================================================
+                 AI WORKFLOW
+            ================================================== -->
+
+            <section class="dashboard-section workflow-section">
+
+                <div class="section-heading">
+
+                    <h2>
+                        AI-Assisted Workflow
+                    </h2>
+
+                    <p>
+                        The system assists the officer through
+                        each stage while keeping final control
+                        with the officer.
+                    </p>
+
+                </div>
+
+
+                <div class="workflow-card">
+
+                    <!-- STEP 1 -->
+
+                    <div class="workflow-step active">
+
+                        <div class="workflow-number">
+                            01
+                        </div>
+
+                        <div class="workflow-title">
+                            Voice Complaint
+                        </div>
+
+                        <div class="workflow-description">
+                            Capture the complainant's statement.
+                        </div>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <!-- STEP 2 -->
+
+                    <div class="workflow-step">
+
+                        <div class="workflow-number">
+                            02
+                        </div>
+
+                        <div class="workflow-title">
+                            Multilingual Transcription
+                        </div>
+
+                        <div class="workflow-description">
+                            Convert speech into text using
+                            Whisper.
+                        </div>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <!-- STEP 3 -->
+
+                    <div class="workflow-step">
+
+                        <div class="workflow-number">
+                            03
+                        </div>
+
+                        <div class="workflow-title">
+                            AI Analysis
+                        </div>
+
+                        <div class="workflow-description">
+                            Extract information and classify
+                            the complaint.
+                        </div>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <!-- STEP 4 -->
+
+                    <div class="workflow-step">
+
+                        <div class="workflow-number">
+                            04
+                        </div>
+
+                        <div class="workflow-title">
+                            FIR Draft
+                        </div>
+
+                        <div class="workflow-description">
+                            Generate a structured FIR draft.
+                        </div>
+
+                    </div>
+
+
+                    <div class="workflow-line"></div>
+
+
+                    <!-- STEP 5 -->
+
+                    <div class="workflow-step">
+
+                        <div class="workflow-number">
+                            05
+                        </div>
+
+                        <div class="workflow-title">
+                            Officer Review
+                        </div>
+
+                        <div class="workflow-description">
+                            Verify, edit and approve the FIR.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 OFFICER-CONTROLLED AI NOTICE
+            ================================================== -->
+
+            <aside class="ai-notice">
+
+                <div class="ai-notice-icon">
+                    ✓
+                </div>
+
+                <div class="ai-notice-content">
+
+                    <h3>
+                        Officer-Controlled AI Assistance
+                    </h3>
+
+                    <p>
+                        IntelliVision provides AI-assisted
+                        analysis and FIR drafting. The officer
+                        remains responsible for reviewing and
+                        approving the final FIR. The system does
+                        not independently make the final legal
+                        decision.
+                    </p>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script
+        src="{{ url_for('static', filename='js/script.js') }}"
+    ></script>
+
+</body>
+</html>

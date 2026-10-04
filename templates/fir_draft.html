@@ -1,0 +1,2321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FIR Draft | IntelliVision</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+        /* =========================================================
+           FIR DRAFT PAGE ONLY
+           Scoped so the rest of IntelliVision is NOT affected
+        ========================================================= */
+
+        .fir-draft-page {
+            min-height: 100vh;
+            background: #f4f7fb;
+            color: #10233f;
+        }
+
+        .fir-draft-page * {
+            box-sizing: border-box;
+        }
+
+        /* ---------- Header ---------- */
+
+        .fir-draft-page .app-header {
+            height: 88px;
+            background: #ffffff;
+            border-bottom: 1px solid #e1e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 48px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .fir-draft-page .brand-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .fir-draft-page .brand-logo {
+            width: 53px;
+            height: 53px;
+            border-radius: 12px;
+            background: #153e68;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 15px;
+            font-weight: 800;
+            box-shadow: 0 5px 14px rgba(20, 59, 99, 0.18);
+        }
+
+        .fir-draft-page .brand-name {
+            margin: 0;
+            color: #0c2443;
+            font-size: 23px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .fir-draft-page .brand-subtitle {
+            margin: 4px 0 0;
+            color: #647a98;
+            font-size: 12px;
+        }
+
+        .fir-draft-page .officer-area {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .fir-draft-page .officer-details {
+            text-align: right;
+        }
+
+        .fir-draft-page .officer-name {
+            display: block;
+            color: #0c2443;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .fir-draft-page .officer-rank {
+            display: block;
+            color: #7083a0;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .fir-draft-page .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 95px;
+            height: 46px;
+            border-radius: 10px;
+            border: 1px solid #d5dfeb;
+            text-decoration: none;
+            background: #ffffff;
+            color: #173e68;
+            font-size: 14px;
+            font-weight: 700;
+            transition: 0.2s ease;
+        }
+
+        .fir-draft-page .logout-btn:hover {
+            background: #f5f8fc;
+        }
+
+        /* ---------- Main ---------- */
+
+        .fir-draft-page .page-container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 50px 32px 80px;
+        }
+
+        .fir-draft-page .eyebrow {
+            margin: 0 0 10px;
+            color: #46739e;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .fir-draft-page .page-title {
+            margin: 0;
+            color: #0b203d;
+            font-size: 35px;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+        }
+
+        .fir-draft-page .page-description {
+            margin: 10px 0 0;
+            color: #6c7f99;
+            font-size: 15px;
+        }
+
+        /* ---------- Workflow ---------- */
+
+        .fir-draft-page .workflow-card {
+            margin-top: 32px;
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 15px;
+            padding: 25px 28px;
+            box-shadow: 0 5px 18px rgba(28, 53, 83, 0.035);
+        }
+
+        .fir-draft-page .workflow {
+            display: grid;
+            grid-template-columns:
+                auto minmax(50px, 1fr)
+                auto minmax(50px, 1fr)
+                auto minmax(50px, 1fr)
+                auto;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .fir-draft-page .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .fir-draft-page .step-circle {
+            flex-shrink: 0;
+            width: 39px;
+            height: 39px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #edf3f8;
+            color: #657c99;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .fir-draft-page .workflow-step.completed .step-circle {
+            background: #dfeaf4;
+            color: #173e68;
+        }
+
+        .fir-draft-page .workflow-step.active .step-circle {
+            background: #153e68;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(21, 62, 104, 0.22);
+        }
+
+        .fir-draft-page .step-text strong {
+            display: block;
+            color: #10233f;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .fir-draft-page .step-text span {
+            display: block;
+            color: #8190a6;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .fir-draft-page .workflow-line {
+            height: 1px;
+            background: #dbe4ee;
+            width: 100%;
+        }
+
+        /* ---------- AI summary ---------- */
+
+        .fir-draft-page .analysis-strip {
+            margin-top: 22px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .fir-draft-page .analysis-item {
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 12px;
+            padding: 17px 20px;
+        }
+
+        .fir-draft-page .analysis-label {
+            color: #73859e;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .fir-draft-page .analysis-value {
+            display: block;
+            margin-top: 7px;
+            color: #133b64;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        /* ---------- Document container ---------- */
+
+        .fir-draft-page .document-card {
+            margin-top: 25px;
+            background: #ffffff;
+            border: 1px solid #dce5ef;
+            border-radius: 16px;
+            box-shadow: 0 9px 28px rgba(25, 48, 78, 0.055);
+            overflow: hidden;
+        }
+
+        .fir-draft-page .document-toolbar {
+            padding: 20px 28px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #ffffff;
+        }
+
+        .fir-draft-page .document-toolbar h2 {
+            margin: 0;
+            color: #10233f;
+            font-size: 18px;
+        }
+
+        .fir-draft-page .document-toolbar p {
+            margin: 5px 0 0;
+            color: #72849c;
+            font-size: 12px;
+        }
+
+        .fir-draft-page .draft-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            border-radius: 20px;
+            padding: 8px 13px;
+            background: #eef4f9;
+            color: #2b5c88;
+            border: 1px solid #d6e3ef;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+        }
+
+        .fir-draft-page .draft-badge::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #6088ae;
+        }
+
+        /* ---------- FIR paper ---------- */
+
+        .fir-draft-page .fir-paper-wrapper {
+            padding: 36px;
+            background: #f7f9fc;
+        }
+
+        .fir-draft-page .fir-paper {
+            max-width: 1120px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 1px solid #b8c1cc;
+            padding: 30px 34px 38px;
+            color: #111827;
+            box-shadow: 0 5px 16px rgba(28, 43, 59, 0.06);
+        }
+
+        .fir-draft-page .official-header {
+            text-align: center;
+            margin-bottom: 23px;
+        }
+
+        .fir-draft-page .official-codes {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            margin-bottom: 8px;
+            color: #111827;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+        }
+
+        .fir-draft-page .official-header h1 {
+            margin: 6px 0;
+            font-family: Georgia, "Times New Roman", serif;
+            color: #111827;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .fir-draft-page .official-header p {
+            margin: 0;
+            color: #242a32;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* ---------- FIR numbered blocks ---------- */
+
+        .fir-draft-page .fir-item {
+            border: 1px solid #9da8b5;
+            border-bottom: 0;
+        }
+
+        .fir-draft-page .fir-item:last-of-type {
+            border-bottom: 1px solid #9da8b5;
+        }
+
+        .fir-draft-page .item-title {
+            padding: 10px 12px;
+            border-bottom: 1px solid #c2cad3;
+            background: #f8fafc;
+            color: #151a21;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .fir-draft-page .item-content {
+            padding: 14px;
+        }
+
+        .fir-draft-page .form-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 12px;
+        }
+
+        .fir-draft-page .field {
+            grid-column: span 4;
+        }
+
+        .fir-draft-page .field.span-2 {
+            grid-column: span 2;
+        }
+
+        .fir-draft-page .field.span-3 {
+            grid-column: span 3;
+        }
+
+        .fir-draft-page .field.span-4 {
+            grid-column: span 4;
+        }
+
+        .fir-draft-page .field.span-5 {
+            grid-column: span 5;
+        }
+
+        .fir-draft-page .field.span-6 {
+            grid-column: span 6;
+        }
+
+        .fir-draft-page .field.span-7 {
+            grid-column: span 7;
+        }
+
+        .fir-draft-page .field.span-8 {
+            grid-column: span 8;
+        }
+
+        .fir-draft-page .field.span-9 {
+            grid-column: span 9;
+        }
+
+        .fir-draft-page .field.span-12 {
+            grid-column: span 12;
+        }
+
+        .fir-draft-page .field label {
+            display: block;
+            margin: 0 0 5px;
+            color: #384658;
+            font-size: 11px;
+            line-height: 1.3;
+            font-weight: 700;
+        }
+
+        .fir-draft-page input,
+        .fir-draft-page textarea,
+        .fir-draft-page select {
+            width: 100%;
+            border: 1px solid #cbd4df;
+            border-radius: 5px;
+            background: #ffffff;
+            padding: 9px 10px;
+            color: #172235;
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .fir-draft-page textarea {
+            min-height: 92px;
+            resize: vertical;
+            line-height: 1.55;
+        }
+
+        .fir-draft-page textarea.large-text {
+            min-height: 170px;
+        }
+
+        .fir-draft-page input:focus,
+        .fir-draft-page textarea:focus,
+        .fir-draft-page select:focus {
+            border-color: #477ba8;
+            box-shadow: 0 0 0 3px rgba(71, 123, 168, 0.1);
+        }
+
+        .fir-draft-page .system-field {
+            background: #f1f4f7 !important;
+            color: #58677b;
+            cursor: not-allowed;
+        }
+
+        .fir-draft-page .sub-heading {
+            grid-column: span 12;
+            margin: 3px 0 -1px;
+            color: #1b314d;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        /* ---------- Legal table ---------- */
+
+        .fir-draft-page .legal-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .fir-draft-page .legal-table th,
+        .fir-draft-page .legal-table td {
+            border: 1px solid #bdc6d0;
+            padding: 9px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .fir-draft-page .legal-table th {
+            background: #f3f6f9;
+            font-weight: 800;
+        }
+
+        .fir-draft-page .legal-table input {
+            border: 0;
+            border-radius: 0;
+            padding: 4px;
+        }
+
+        /* ---------- Checkboxes ---------- */
+
+        .fir-draft-page .action-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .fir-draft-page .action-option {
+            border: 1px solid #d3dbe5;
+            border-radius: 6px;
+            padding: 9px 11px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .fir-draft-page .action-option input {
+            width: auto;
+        }
+
+        /* ---------- Missing info ---------- */
+
+        .fir-draft-page .review-notice {
+            margin: 25px 28px 0;
+            border: 1px solid #d4e1ed;
+            background: #f5f9fc;
+            border-radius: 12px;
+            padding: 17px 20px;
+        }
+
+        .fir-draft-page .review-notice h3 {
+            margin: 0 0 7px;
+            font-size: 14px;
+            color: #163f68;
+        }
+
+        .fir-draft-page .review-notice p {
+            margin: 0;
+            color: #647991;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* ---------- Buttons ---------- */
+
+        .fir-draft-page .review-actions {
+            padding: 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 26px;
+        }
+
+        .fir-draft-page .human-note {
+            color: #71849d;
+            font-size: 12px;
+        }
+
+        .fir-draft-page .human-note strong {
+            color: #355e85;
+        }
+
+        .fir-draft-page .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .fir-draft-page .action-btn {
+            min-height: 44px;
+            padding: 0 21px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 800;
+            border: 1px solid transparent;
+            transition: 0.18s ease;
+        }
+
+        .fir-draft-page .reject-btn {
+            color: #a94141;
+            border-color: #e7c9c9;
+            background: #ffffff;
+        }
+
+        .fir-draft-page .reject-btn:hover {
+            background: #fff6f6;
+        }
+
+        .fir-draft-page .approve-btn {
+            color: #ffffff;
+            background: #153e68;
+            border-color: #153e68;
+            min-width: 145px;
+        }
+
+        .fir-draft-page .approve-btn:hover {
+            background: #0f3255;
+        }
+
+        .fir-draft-page button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        /* ---------- Approved result ---------- */
+
+        .fir-draft-page #finalSection {
+            display: none;
+            margin: 0 28px 28px;
+            border: 1px solid #cde1d3;
+            border-radius: 12px;
+            padding: 19px;
+            background: #f4faf6;
+        }
+
+        .fir-draft-page #finalSection h3 {
+            margin: 0 0 14px;
+            color: #25603a;
+            font-size: 16px;
+        }
+
+        .fir-draft-page .final-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .fir-draft-page .print-btn {
+            margin-top: 14px;
+            background: #ffffff;
+            border: 1px solid #bcd1c3;
+            color: #2a5f3c;
+        }
+
+        /* ---------- Responsive ---------- */
+
+        @media (max-width: 1000px) {
+
+            .fir-draft-page .workflow {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .fir-draft-page .workflow-line {
+                display: none;
+            }
+
+            .fir-draft-page .analysis-strip {
+                grid-template-columns: 1fr;
+            }
+
+            .fir-draft-page .field,
+            .fir-draft-page .field.span-2,
+            .fir-draft-page .field.span-3,
+            .fir-draft-page .field.span-4,
+            .fir-draft-page .field.span-5,
+            .fir-draft-page .field.span-6,
+            .fir-draft-page .field.span-7,
+            .fir-draft-page .field.span-8,
+            .fir-draft-page .field.span-9 {
+                grid-column: span 6;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .fir-draft-page .app-header {
+                padding: 0 18px;
+            }
+
+            .fir-draft-page .brand-subtitle,
+            .fir-draft-page .officer-details {
+                display: none;
+            }
+
+            .fir-draft-page .page-container {
+                padding: 32px 15px 60px;
+            }
+
+            .fir-draft-page .workflow {
+                grid-template-columns: 1fr;
+            }
+
+            .fir-draft-page .fir-paper-wrapper {
+                padding: 12px;
+            }
+
+            .fir-draft-page .fir-paper {
+                padding: 20px 15px;
+            }
+
+            .fir-draft-page .field,
+            .fir-draft-page .field.span-2,
+            .fir-draft-page .field.span-3,
+            .fir-draft-page .field.span-4,
+            .fir-draft-page .field.span-5,
+            .fir-draft-page .field.span-6,
+            .fir-draft-page .field.span-7,
+            .fir-draft-page .field.span-8,
+            .fir-draft-page .field.span-9,
+            .fir-draft-page .field.span-12 {
+                grid-column: span 12;
+            }
+
+            .fir-draft-page .review-actions {
+                flex-direction: column;
+                gap: 20px;
+                align-items: stretch;
+            }
+
+            .fir-draft-page .button-group {
+                flex-direction: column;
+            }
+        }
+
+        @media print {
+
+            .fir-draft-page .app-header,
+            .fir-draft-page .page-heading,
+            .fir-draft-page .workflow-card,
+            .fir-draft-page .analysis-strip,
+            .fir-draft-page .document-toolbar,
+            .fir-draft-page .review-notice,
+            .fir-draft-page .review-actions,
+            .fir-draft-page #finalSection {
+                display: none !important;
+            }
+
+            .fir-draft-page,
+            .fir-draft-page .page-container,
+            .fir-draft-page .document-card,
+            .fir-draft-page .fir-paper-wrapper {
+                background: #ffffff;
+                padding: 0;
+                margin: 0;
+                border: 0;
+                box-shadow: none;
+            }
+
+            .fir-draft-page .fir-paper {
+                box-shadow: none;
+                border: 0;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="fir-draft-page">
+
+<!-- =========================================================
+     INTELLIVISION HEADER
+========================================================= -->
+
+<header class="app-header">
+
+    <div class="brand-area">
+
+        <div class="brand-logo">
+            FIR
+        </div>
+
+        <div>
+            <h1 class="brand-name">IntelliVision</h1>
+            <p class="brand-subtitle">
+                AI-Assisted FIR Draft Generation System
+            </p>
+        </div>
+
+    </div>
+
+    <div class="officer-area">
+
+        <div class="officer-details">
+            <span class="officer-name">
+                {{ session.get('officer_name', 'Police Officer') }}
+            </span>
+
+            <span class="officer-rank">
+                {{ session.get('officer_rank', 'Authorized Officer') }}
+            </span>
+        </div>
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="logout-btn"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<main class="page-container">
+
+    <!-- =====================================================
+         PAGE HEADING
+    ====================================================== -->
+
+    <section class="page-heading">
+
+        <p class="eyebrow">
+            FIR DRAFT
+        </p>
+
+        <h1 class="page-title">
+            Review FIR Draft
+        </h1>
+
+        <p class="page-description">
+            Review and edit the AI-assisted FIR draft before making the final
+            approval decision.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         WORKFLOW
+    ====================================================== -->
+
+    <section class="workflow-card">
+
+        <div class="workflow">
+
+            <div class="workflow-step completed">
+
+                <div class="step-circle">
+                    ✓
+                </div>
+
+                <div class="step-text">
+                    <strong>Voice Complaint</strong>
+                    <span>Statement captured</span>
+                </div>
+
+            </div>
+
+            <div class="workflow-line"></div>
+
+
+            <div class="workflow-step completed">
+
+                <div class="step-circle">
+                    ✓
+                </div>
+
+                <div class="step-text">
+                    <strong>Transcription</strong>
+                    <span>Statement reviewed</span>
+                </div>
+
+            </div>
+
+            <div class="workflow-line"></div>
+
+
+            <div class="workflow-step active">
+
+                <div class="step-circle">
+                    3
+                </div>
+
+                <div class="step-text">
+                    <strong>FIR Draft</strong>
+                    <span>AI-assisted generation</span>
+                </div>
+
+            </div>
+
+            <div class="workflow-line"></div>
+
+
+            <div class="workflow-step">
+
+                <div class="step-circle">
+                    4
+                </div>
+
+                <div class="step-text">
+                    <strong>Officer Review</strong>
+                    <span>Approve or reject</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AI ANALYSIS SUMMARY
+    ====================================================== -->
+
+    <section class="analysis-strip">
+
+        <div class="analysis-item">
+            <span class="analysis-label">Crime Classification</span>
+
+            <span
+                class="analysis-value"
+                id="crimeCategoryDisplay"
+            >
+                {{ fir.get('crime_category', '') if fir else '' }}
+            </span>
+        </div>
+
+
+        <div class="analysis-item">
+            <span class="analysis-label">AI Confidence</span>
+
+            <span
+                class="analysis-value"
+                id="confidenceDisplay"
+            >
+                {% if fir and fir.get('crime_classification_confidence') is not none %}
+                    {{ fir.get('crime_classification_confidence') }}
+                {% endif %}
+            </span>
+        </div>
+
+
+        <div class="analysis-item">
+            <span class="analysis-label">Review Status</span>
+
+            <span
+                class="analysis-value"
+                id="reviewStatus"
+            >
+                Awaiting Officer Review
+            </span>
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FIR DOCUMENT
+    ====================================================== -->
+
+    <section class="document-card">
+
+        <div class="document-toolbar">
+
+            <div>
+                <h2>First Information Report Draft</h2>
+
+                <p>
+                    AI-assisted fields may be edited by the reviewing officer.
+                    System-generated fields remain locked.
+                </p>
+            </div>
+
+            <span class="draft-badge">
+                AI DRAFT • HUMAN REVIEW REQUIRED
+            </span>
+
+        </div>
+
+
+        <div class="fir-paper-wrapper">
+
+            <div
+                class="fir-paper"
+                id="firDocument"
+            >
+
+                <!-- =========================================
+                     OFFICIAL HEADER
+                ========================================== -->
+
+                <div class="official-header">
+
+                    <div class="official-codes">
+                        <span>N.C.R.B.</span>
+                        <span>I.I.F.-I</span>
+                    </div>
+
+                    <h1>
+                        FIRST INFORMATION REPORT
+                    </h1>
+
+                    <p>
+                        Under Section 173 B.N.S.S.
+                    </p>
+
+                </div>
+
+
+                <!-- =========================================
+                     ITEM 1
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        1. District / Police Station / Year / FIR Number /
+                        Date and Time of FIR
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-3">
+
+                                <label>District</label>
+
+                                <input
+                                    id="district"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ fir.get('district', '') if fir else '' }}"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Police Station</label>
+
+                                <input
+                                    id="policeStation"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ fir.get('police_station', '') if fir else '' }}"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-2">
+
+                                <label>Year</label>
+
+                                <input
+                                    id="year"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ fir.get('year', '') if fir else '' }}"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-2">
+
+                                <label>FIR Number</label>
+
+                                <input
+                                    id="firNumber"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ fir.get('fir_number', '') if fir and fir.get('fir_number') else '' }}"
+                                    placeholder="Assigned after approval"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-2">
+
+                                <label>FIR Date & Time</label>
+
+                                <input
+                                    id="firDateTime"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ fir.get('fir_date_time', '') if fir and fir.get('fir_date_time') else '' }}"
+                                    placeholder="Assigned after approval"
+                                    readonly
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 2
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        2. Act(s) and Section(s)
+                    </div>
+
+                    <div class="item-content">
+
+                        <table class="legal-table">
+
+                            <thead>
+                                <tr>
+                                    <th style="width: 10%;">Sr. No.</th>
+                                    <th style="width: 45%;">Act</th>
+                                    <th style="width: 45%;">Section(s)</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+
+                                    <td>1</td>
+
+                                    <td>
+                                        <input
+                                            type="text"
+                                            id="act"
+                                            placeholder="Enter / verify Act"
+                                        >
+                                    </td>
+
+                                    <td>
+                                        <input
+                                            type="text"
+                                            id="section"
+                                            placeholder="Enter / verify Section"
+                                        >
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 3
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        3. Occurrence of Offence / Information Received /
+                        General Diary Reference
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="sub-heading">
+                                3(a) Occurrence of Offence
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Day</label>
+
+                                <input
+                                    id="occurrenceDay"
+                                    type="text"
+                                    placeholder="Enter day"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Date From</label>
+
+                                <input
+                                    id="occurrenceDate"
+                                    type="text"
+                                    placeholder="DD/MM/YYYY"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Date To</label>
+
+                                <input
+                                    id="occurrenceDateTo"
+                                    type="text"
+                                    placeholder="DD/MM/YYYY"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Time Period</label>
+
+                                <input
+                                    id="timePeriod"
+                                    type="text"
+                                    placeholder="Enter time period"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Time From</label>
+
+                                <input
+                                    id="occurrenceTime"
+                                    type="text"
+                                    placeholder="HH:MM"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Time To</label>
+
+                                <input
+                                    id="occurrenceTimeTo"
+                                    type="text"
+                                    placeholder="HH:MM"
+                                >
+
+                            </div>
+
+
+                            <div class="sub-heading">
+                                3(b) Information Received at Police Station
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>Date</label>
+
+                                <input
+                                    id="informationReceivedDate"
+                                    class="system-field"
+                                    type="text"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>Time</label>
+
+                                <input
+                                    id="informationReceivedTime"
+                                    class="system-field"
+                                    type="text"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="sub-heading">
+                                3(c) General Diary Reference
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>Entry / Reference Number</label>
+
+                                <input
+                                    id="generalDiary"
+                                    type="text"
+                                    placeholder="Enter General Diary reference"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>Date & Time</label>
+
+                                <input
+                                    id="generalDiaryDateTime"
+                                    type="text"
+                                    placeholder="Enter date and time"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 4
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        4. Type of Information
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-12">
+
+                                <select id="informationType">
+                                    <option value="">Select type of information</option>
+                                    <option value="Oral">Oral</option>
+                                    <option value="Written">Written</option>
+                                    <option value="Electronic">Electronic</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 5
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        5. Place of Occurrence
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-4">
+
+                                <label>
+                                    Direction and Distance from Police Station
+                                </label>
+
+                                <input
+                                    id="directionDistance"
+                                    type="text"
+                                    placeholder="Enter direction and distance"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-2">
+
+                                <label>Beat Number</label>
+
+                                <input
+                                    id="beatNumber"
+                                    type="text"
+                                    placeholder="Enter beat no."
+                                >
+
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>Address / Place of Occurrence</label>
+
+                                <input
+                                    id="placeOfOccurrence"
+                                    type="text"
+                                    value="{{ fir.get('place_of_occurrence', '') if fir else '' }}"
+                                    placeholder="Enter place of occurrence"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>
+                                    If outside P.S. limit, name of Police Station
+                                </label>
+
+                                <input
+                                    id="outsidePoliceStation"
+                                    type="text"
+                                    placeholder="Enter Police Station"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>District / State</label>
+
+                                <input
+                                    id="outsideDistrictState"
+                                    type="text"
+                                    placeholder="Enter District / State"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 6
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        6. Complainant / Informant Details
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-6">
+
+                                <label>Name</label>
+
+                                <input
+                                    id="complainantName"
+                                    type="text"
+                                    value="{{ fir.get('complainant_name', '') if fir else '' }}"
+                                    placeholder="Enter complainant name"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>Father's / Husband's Name</label>
+
+                                <input
+                                    id="fatherName"
+                                    type="text"
+                                    value="{{ fir.get('father_husband_name', '') if fir else '' }}"
+                                    placeholder="Enter father's / husband's name"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Date of Birth</label>
+
+                                <input
+                                    id="dateOfBirth"
+                                    type="text"
+                                    value="{{ fir.get('date_of_birth', '') if fir else '' }}"
+                                    placeholder="DD/MM/YYYY"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Nationality</label>
+
+                                <input
+                                    id="nationality"
+                                    type="text"
+                                    value="{{ fir.get('nationality', '') if fir else '' }}"
+                                    placeholder="Enter nationality"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>UID Number</label>
+
+                                <input
+                                    id="uid"
+                                    type="text"
+                                    value="{{ fir.get('uid_number', '') if fir else '' }}"
+                                    placeholder="Enter UID"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Occupation</label>
+
+                                <input
+                                    id="occupation"
+                                    type="text"
+                                    value="{{ fir.get('occupation', '') if fir else '' }}"
+                                    placeholder="Enter occupation"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Passport Number</label>
+
+                                <input
+                                    id="passport"
+                                    type="text"
+                                    value="{{ fir.get('passport_number', '') if fir else '' }}"
+                                    placeholder="Enter passport number"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Place of Issue</label>
+
+                                <input
+                                    id="passportPlace"
+                                    type="text"
+                                    placeholder="Enter place of issue"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Date of Issue</label>
+
+                                <input
+                                    id="passportDate"
+                                    type="text"
+                                    placeholder="DD/MM/YYYY"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Other ID Details</label>
+
+                                <input
+                                    id="idDetails"
+                                    type="text"
+                                    value="{{ fir.get('other_id_details', '') if fir else '' }}"
+                                    placeholder="Enter ID type"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>ID Number</label>
+
+                                <input
+                                    id="idNumber"
+                                    type="text"
+                                    placeholder="Enter ID number"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Mobile Number</label>
+
+                                <input
+                                    id="mobile"
+                                    type="text"
+                                    value="{{ fir.get('mobile_number', '') if fir else '' }}"
+                                    placeholder="Enter mobile number"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Phone Number</label>
+
+                                <input
+                                    id="phone"
+                                    type="text"
+                                    value="{{ fir.get('phone_number', '') if fir else '' }}"
+                                    placeholder="Enter phone number"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-8">
+
+                                <label>Present Address</label>
+
+                                <textarea
+                                    id="address"
+                                    placeholder="Enter present address"
+                                >{{ fir.get('complainant_address', '') if fir else '' }}</textarea>
+
+                            </div>
+
+
+                            <div class="field span-12">
+
+                                <label>Permanent Address</label>
+
+                                <textarea
+                                    id="permanentAddress"
+                                    placeholder="Enter permanent address"
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 7
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        7. Details of Known / Suspected / Unknown Accused
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-4">
+
+                                <label>Name</label>
+
+                                <input
+                                    id="accusedName"
+                                    type="text"
+                                    placeholder="Enter accused name"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Alias</label>
+
+                                <input
+                                    id="accusedAlias"
+                                    type="text"
+                                    placeholder="Enter alias"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Relative's Name</label>
+
+                                <input
+                                    id="accusedRelative"
+                                    type="text"
+                                    placeholder="Enter relative's name"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-12">
+
+                                <label>Address / Other Details</label>
+
+                                <textarea
+                                    id="accusedAddress"
+                                    placeholder="Enter accused details"
+                                >{{ fir.get('accused_details', '') if fir else '' }}</textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 8
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        8. Reasons for Delay in Reporting by the
+                        Complainant / Informant
+                    </div>
+
+                    <div class="item-content">
+
+                        <textarea
+                            id="delayReason"
+                            placeholder="Enter reason for delay, if applicable"
+                        >{{ fir.get('reason_for_delay', '') if fir else '' }}</textarea>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 9
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        9. Particulars of Property Stolen / Involved
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-3">
+
+                                <label>Property Category</label>
+
+                                <input
+                                    id="propertyCategory"
+                                    type="text"
+                                    placeholder="Enter category"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Property Type</label>
+
+                                <input
+                                    id="propertyType"
+                                    type="text"
+                                    placeholder="Enter property type"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Description</label>
+
+                                <input
+                                    id="propertyDescription"
+                                    type="text"
+                                    value="{{ fir.get('property_details', '') if fir else '' }}"
+                                    placeholder="Enter property description"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-2">
+
+                                <label>Value</label>
+
+                                <input
+                                    id="propertyValue"
+                                    type="text"
+                                    value="{{ fir.get('total_property_value', '') if fir else '' }}"
+                                    placeholder="₹"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 10
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        10. Total Value of Property Stolen / Involved
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-12">
+
+                                <input
+                                    id="totalPropertyValue"
+                                    type="text"
+                                    value="{{ fir.get('total_property_value', '') if fir else '' }}"
+                                    placeholder="Enter total property value"
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 11
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        11. Inquest Report / U.D. Case Number, if any
+                    </div>
+
+                    <div class="item-content">
+
+                        <input
+                            id="inquest"
+                            type="text"
+                            value="{{ fir.get('inquest_ud_case', '') if fir else '' }}"
+                            placeholder="Enter Inquest Report / U.D. Case number"
+                        >
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 12
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        12. First Information Contents
+                    </div>
+
+                    <div class="item-content">
+
+                        <textarea
+                            id="firstInformationContents"
+                            class="large-text"
+                            placeholder="FIR narrative generated from the complainant's statement"
+                        >{{ fir.get('first_information_contents', '') if fir else '' }}</textarea>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 13
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        13. Action Taken
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="action-options">
+
+                            <label class="action-option">
+                                <input
+                                    type="checkbox"
+                                    id="actionRegistered"
+                                >
+                                Case registered and investigation taken up
+                            </label>
+
+
+                            <label class="action-option">
+                                <input
+                                    type="checkbox"
+                                    id="actionDirected"
+                                >
+                                Directed investigation
+                            </label>
+
+
+                            <label class="action-option">
+                                <input
+                                    type="checkbox"
+                                    id="actionRefused"
+                                >
+                                Investigation refused
+                            </label>
+
+
+                            <label class="action-option">
+                                <input
+                                    type="checkbox"
+                                    id="actionTransferred"
+                                >
+                                Case transferred
+                            </label>
+
+                        </div>
+
+
+                        <div class="form-grid">
+
+                            <div class="field span-5">
+
+                                <label>Investigation Officer</label>
+
+                                <input
+                                    id="investigationOfficer"
+                                    type="text"
+                                    value="{{ session.get('officer_name', '') }}"
+                                    placeholder="Enter officer name"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Rank</label>
+
+                                <input
+                                    id="investigationOfficerRank"
+                                    type="text"
+                                    value="{{ session.get('officer_rank', '') }}"
+                                    placeholder="Enter rank"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-3">
+
+                                <label>Officer Number</label>
+
+                                <input
+                                    id="investigationOfficerNumber"
+                                    type="text"
+                                    value="{{ session.get('officer_id', '') }}"
+                                    placeholder="Enter officer number"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-12">
+
+                                <label>Action Taken Details</label>
+
+                                <textarea
+                                    id="actionTaken"
+                                    placeholder="Enter action taken"
+                                >{{ fir.get('action_taken', '') if fir else '' }}</textarea>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 14
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        14. Signature / Thumb Impression of
+                        Complainant / Informant
+                    </div>
+
+                    <div class="item-content">
+
+                        <div class="form-grid">
+
+                            <div class="field span-6">
+
+                                <label>Complainant / Informant</label>
+
+                                <input
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ fir.get('complainant_name', '') if fir else '' }}"
+                                    placeholder="Complainant / Informant"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-6">
+
+                                <label>
+                                    Signature / Thumb Impression
+                                </label>
+
+                                <input
+                                    type="text"
+                                    placeholder="To be obtained as per procedure"
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Officer Name</label>
+
+                                <input
+                                    id="officerName"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ session.get('officer_name', '') }}"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Rank</label>
+
+                                <input
+                                    id="officerRank"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ session.get('officer_rank', '') }}"
+                                    readonly
+                                >
+
+                            </div>
+
+
+                            <div class="field span-4">
+
+                                <label>Officer ID</label>
+
+                                <input
+                                    id="officerId"
+                                    class="system-field"
+                                    type="text"
+                                    value="{{ session.get('officer_id', '') }}"
+                                    readonly
+                                >
+
+                            </div>
+
+                            <div class="field span-4">
+
+                                <label>Date</label>
+
+                                <input
+                                    id="signatureDate"
+                                    class="system-field"
+                                    type="text"
+                                    value=""
+                                    readonly
+                                >
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================================
+                     ITEM 15
+                ========================================== -->
+
+                <section class="fir-item">
+
+                    <div class="item-title">
+                        15. Date and Time of Dispatch to the Court
+                    </div>
+
+                    <div class="item-content">
+
+                        <input
+                            id="dispatchDateTime"
+                            class="system-field"
+                            type="text"
+                            placeholder="Generated after final registration / dispatch"
+                            readonly
+                        >
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             MISSING INFORMATION
+        ================================================== -->
+
+        <div class="review-notice">
+
+            <h3>
+                Officer Review Required
+            </h3>
+
+            <p>
+                IntelliVision assists with transcription, information
+                extraction, preliminary classification and FIR drafting.
+                The reviewing police officer remains responsible for
+                verifying all information and making the final legal decision.
+            </p>
+
+            <p
+                id="missingInformation"
+                style="margin-top: 8px;"
+            >
+                {% if fir and fir.get('missing_information') %}
+                    Missing / incomplete information:
+                    {{ fir.get('missing_information') }}
+                {% endif %}
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             APPROVED RESULT
+        ================================================== -->
+
+        <div id="finalSection">
+
+            <h3>
+                FIR Approved Successfully
+            </h3>
+
+            <div class="final-grid">
+
+                <div>
+                    <strong>FIR Number</strong>
+                    <div id="finalFirNumber">—</div>
+                </div>
+
+                <div>
+                    <strong>FIR Registration Date & Time</strong>
+                    <div id="finalFirDateTime">—</div>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="action-btn print-btn"
+                id="printButton"
+                onclick="window.print()"
+            >
+                Print FIR
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             REVIEW ACTIONS
+        ================================================== -->
+
+        <div class="review-actions">
+
+            <div class="human-note">
+                <strong>AI-Assisted • Human Verified</strong><br>
+                Final control remains with the reviewing officer.
+            </div>
+
+
+            <div class="button-group">
+
+                <button
+                    type="button"
+                    class="action-btn reject-btn"
+                    id="rejectButton"
+                >
+                    Reject & Start New Complaint
+                </button>
+
+
+                <button
+                    type="button"
+                    class="action-btn approve-btn"
+                    id="approveButton"
+                >
+                    Approve FIR
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================================================
+     DATA FOR EXISTING SCRIPT
+========================================================= -->
+
+<script>
+
+    /*
+       Keep these values available for your existing script.js.
+       FIR number is intentionally NOT generated here.
+    */
+
+    window.currentFirId =
+        {{ (fir.get('fir_id') if fir and fir.get('fir_id') else none) | tojson }};
+
+    window.currentComplaintId =
+        {{ (fir.get('complaint_id') if fir and fir.get('complaint_id') else none) | tojson }};
+
+</script>
+
+
+<script>
+    // Section 14 date: automatically show today's date in DD/MM/YYYY format.
+    // Read-only so the existing FIR workflow is not affected.
+    (function () {
+        const signatureDate = document.getElementById("signatureDate");
+        if (signatureDate) {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, "0");
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const year = now.getFullYear();
+            signatureDate.value = `${day}/${month}/${year}`;
+        }
+    })();
+</script>
+
+<script
+    src="{{ url_for('static', filename='js/script.js') }}"
+></script>
+
+</body>
+</html>

@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>New Complaint | IntelliVision</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<!-- ============================================================
+     TOP NAVIGATION
+============================================================ -->
+
+<header class="iv-navbar">
+
+    <div class="iv-brand">
+
+        <div class="iv-brand-icon">
+            FIR
+        </div>
+
+        <div>
+            <div class="iv-brand-name">
+                IntelliVision
+            </div>
+
+            <div class="iv-brand-subtitle">
+                AI-Assisted FIR Draft Generation System
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="iv-user-area">
+
+        <div class="iv-user-info">
+
+            <strong>
+                {{ session.get('officer_name', 'Police Officer') }}
+            </strong>
+
+            <span>
+                {{ session.get('officer_rank', 'Authorized Officer') }}
+            </span>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="iv-logout"
+        >
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<!-- ============================================================
+     MAIN APPLICATION
+============================================================ -->
+
+<main class="iv-page">
+
+    <!-- PAGE TITLE -->
+
+    <section class="iv-page-heading">
+
+        <div>
+
+            <span class="iv-eyebrow">
+                NEW COMPLAINT
+            </span>
+
+            <h1>
+                Record Complainant Statement
+            </h1>
+
+            <p>
+                Capture the complainant's statement and generate an
+                AI-assisted FIR draft for officer review.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         WORKFLOW
+    ========================================================= -->
+
+    <section class="iv-workflow-card">
+
+        <div class="iv-workflow">
+
+            <!-- STEP 1 -->
+
+            <div class="iv-step active">
+
+                <div class="iv-step-number">
+                    1
+                </div>
+
+                <div class="iv-step-content">
+
+                    <strong>
+                        Voice Complaint
+                    </strong>
+
+                    <span>
+                        Record statement
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="iv-step-line"></div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="iv-step">
+
+                <div class="iv-step-number">
+                    2
+                </div>
+
+                <div class="iv-step-content">
+
+                    <strong>
+                        Transcription
+                    </strong>
+
+                    <span>
+                        Review speech text
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="iv-step-line"></div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="iv-step">
+
+                <div class="iv-step-number">
+                    3
+                </div>
+
+                <div class="iv-step-content">
+
+                    <strong>
+                        FIR Draft
+                    </strong>
+
+                    <span>
+                        AI-assisted generation
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="iv-step-line"></div>
+
+
+            <!-- STEP 4 -->
+
+            <div class="iv-step">
+
+                <div class="iv-step-number">
+                    4
+                </div>
+
+                <div class="iv-step-content">
+
+                    <strong>
+                        Officer Review
+                    </strong>
+
+                    <span>
+                        Approve / reject
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         VOICE COMPLAINT
+    ========================================================= -->
+
+    <section
+        id="voiceSection"
+        class="iv-card voice-card"
+    >
+
+        <div class="iv-card-header">
+
+            <div>
+
+                <span class="iv-section-number">
+                    STEP 1
+                </span>
+
+                <h2>
+                    Complainant Statement
+                </h2>
+
+                <p>
+                    Record the statement exactly as provided by the
+                    complainant.
+                </p>
+
+            </div>
+
+
+            <div class="language-badge">
+                English • Hindi • Marathi
+            </div>
+
+        </div>
+
+
+        <div class="voice-center">
+
+            <div class="microphone-circle">
+                🎙
+            </div>
+
+
+            <h3>
+                Record Complaint
+            </h3>
+
+
+            <p class="voice-description">
+                Speak clearly and describe what happened.
+            </p>
+
+
+            <button
+                type="button"
+                id="recordButton"
+                class="iv-record-button"
+            >
+                🎤 Start Recording
+            </button>
+
+
+            <button
+                type="button"
+                id="stopButton"
+                class="iv-stop-button"
+                disabled
+            >
+                ⏹ Stop Recording
+            </button>
+
+
+            <div
+                id="recordingStatus"
+                class="iv-recording-status"
+            >
+                Ready to record
+            </div>
+
+
+            <div
+                id="recordingTimer"
+                class="iv-recording-timer"
+            >
+                00:00
+            </div>
+
+
+            <div
+                id="timer"
+                class="timer"
+                style="display:none;"
+            >
+                00:00
+            </div>
+
+        </div>
+
+
+        <!-- AUDIO PREVIEW -->
+
+        <div
+            id="audioPreview"
+            class="audio-preview"
+            style="display:none;"
+        >
+
+            <div class="audio-preview-title">
+    <span>Recorded Complaint</span>
+    <span id="recordingDuration" class="recording-duration">
+        00:00
+    </span>
+</div>
+
+            <audio
+                id="audioPlayer"
+                controls
+            ></audio>
+
+            <button
+                type="button"
+                id="transcribeButton"
+                class="iv-secondary-button"
+            >
+                📝 Transcribe Complaint
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ========================================================
+         TRANSCRIPTION
+    ========================================================= -->
+
+    <section
+        id="transcriptionSection"
+        class="iv-card"
+        style="display:none;"
+    >
+
+        <div class="iv-card-header">
+
+            <div>
+
+                <span class="iv-section-number">
+                    STEP 2
+                </span>
+
+                <h2>
+                    Voice Transcription
+                </h2>
+
+                <p>
+                    Review the transcription before generating the FIR.
+                    The original speech is preserved separately.
+                </p>
+
+            </div>
+
+
+            <div class="language-result">
+
+                <span>
+                    Detected Language
+                </span>
+
+                <strong id="detectedLanguage">
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="transcription-editor">
+
+            <label for="transcription">
+                Transcribed Complainant Statement
+            </label>
+
+            <textarea
+                id="transcription"
+                rows="9"
+                placeholder="Transcribed complaint will appear here..."
+            ></textarea>
+
+            <div class="transcription-note">
+                You may manually edit the transcription before
+                generating the FIR draft. IntelliVision does not
+                automatically rewrite the complainant's statement.
+            </div>
+
+        </div>
+
+
+        <div class="transcription-actions">
+
+            <button
+                type="button"
+                id="generateButton"
+                class="iv-primary-button"
+            >
+                Generate FIR Draft
+            </button>
+
+        </div>
+
+
+        <div
+            id="generationStatus"
+            class="iv-status"
+        ></div>
+
+    </section>
+
+
+    <!-- ========================================================
+         FIR DRAFT
+    ========================================================= -->
+
+    <section
+        id="firSection"
+        class="iv-fir-area"
+        style="display:none;"
+    >
+
+        <!-- AI STATUS -->
+
+        <div class="iv-ai-banner">
+
+            <div class="iv-ai-icon">
+                AI
+            </div>
+
+            <div>
+
+                <strong>
+                    AI-Generated FIR Draft
+                </strong>
+
+                <span>
+                    Investigation Agent completed the initial analysis.
+                    Officer verification is required before registration.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- FIR DOCUMENT -->
+
+        <div class="iv-fir-card">
+
+            <div class="iv-fir-topbar">
+
+                <div>
+
+                    <span class="iv-section-number">
+                        STEP 3
+                    </span>
+
+                    <h2>
+                        FIR Draft
+                    </h2>
+
+                    <p>
+                        Review and edit AI-assisted information.
+                    </p>
+
+                </div>
+
+
+                <div class="iv-human-badge">
+                    AI-Assisted • Human Verified
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 OFFICIAL FIR PAPER
+            =================================================== -->
+
+            <div class="fir-paper">
+
+                <div class="fir-paper-header">
+
+                    <div class="fir-official-codes">
+
+                        <strong>
+                            N.C.R.B.
+                        </strong>
+
+                        <strong>
+                            I.I.F.-I
+                        </strong>
+
+                    </div>
+
+
+                    <h1>
+                        FIRST INFORMATION REPORT
+                    </h1>
+
+
+                    <p>
+                        (Under Section 173 B.N.S.S.)
+                    </p>
+
+                </div>
+
+
+                <!-- 1 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        1. District / Police Station / Year /
+                        FIR Number / Date & Time
+                    </div>
+
+                    <div class="fir-grid">
+
+                        <div>
+                            <label>District</label>
+
+                            <input
+                                id="district"
+                                readonly
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Police Station</label>
+
+                            <input
+                                id="policeStation"
+                                readonly
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Year</label>
+
+                            <input
+                                id="year"
+                                readonly
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>FIR Number</label>
+
+                            <input
+                                id="firNumber"
+                                readonly
+                                placeholder="Assigned after approval"
+                            >
+                        </div>
+
+
+                        <div class="wide">
+                            <label>
+                                FIR Date & Time
+                            </label>
+
+                            <input
+                                id="firDateTime"
+                                readonly
+                                placeholder="Assigned after approval"
+                            >
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- 2 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        2. Acts and Sections
+                    </div>
+
+                    <table class="official-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Act</th>
+                                <th>Section(s)</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>1</td>
+
+                                <td>
+                                    <input
+                                        id="act"
+                                        class="officer-input"
+                                        placeholder="Enter / verify Act"
+                                    >
+                                </td>
+
+                                <td>
+                                    <input
+                                        id="section"
+                                        class="officer-input"
+                                        placeholder="Enter / verify Section"
+                                    >
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                    <div class="fir-note">
+                        Suggested by AI from the legal database.
+                        Final verification is required from the officer.
+                    </div>
+
+                </section>
+
+
+                <!-- 3 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        3. Occurrence of Offence / Information Received /
+                        General Diary Reference
+                    </div>
+
+                    <div class="fir-subtitle">
+                        3(a) Occurrence of Offence
+                    </div>
+
+                    <div class="fir-grid">
+
+                        <div>
+                            <label>Day</label>
+
+                            <input
+                                id="occurrenceDay"
+                                class="officer-input"
+                                placeholder="Enter day"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Date From</label>
+
+                            <input
+                                id="occurrenceDate"
+                                class="officer-input"
+                                placeholder="Enter occurrence date"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Date To</label>
+
+                            <input
+                                id="occurrenceDateTo"
+                                class="officer-input"
+                                placeholder="Enter date to"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Time Period</label>
+
+                            <input
+                                id="timePeriod"
+                                class="officer-input"
+                                placeholder="Enter time period"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Time From</label>
+
+                            <input
+                                id="occurrenceTime"
+                                class="officer-input"
+                                placeholder="Enter occurrence time"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Time To</label>
+
+                            <input
+                                id="occurrenceTimeTo"
+                                class="officer-input"
+                                placeholder="Enter time to"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="fir-subtitle">
+                        3(b) Information Received at Police Station
+                    </div>
+
+                    <div class="fir-grid">
+
+                        <div>
+                            <label>Date</label>
+
+                            <input
+                                id="informationReceivedDate"
+                                readonly
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Time</label>
+
+                            <input
+                                id="informationReceivedTime"
+                                readonly
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="fir-subtitle">
+                        3(c) General Diary Reference
+                    </div>
+
+                    <div class="fir-grid">
+
+                        <div class="wide">
+                            <label>
+                                General Diary Reference
+                            </label>
+
+                            <input
+                                id="generalDiary"
+                                class="officer-input"
+                                placeholder="Enter General Diary reference"
+                            >
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- 4 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        4. Type of Information
+                    </div>
+
+                    <input
+                        id="informationType"
+                        class="officer-input"
+                        placeholder="Enter type of information"
+                    >
+
+                </section>
+
+
+                <!-- 5 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        5. Place of Occurrence
+                    </div>
+
+                    <div class="fir-grid">
+
+                        <div class="wide">
+
+                            <label>
+                                Address / Location
+                            </label>
+
+                            <textarea
+                                id="placeOfOccurrence"
+                                class="officer-input"
+                                placeholder="Enter address / location"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- 6 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        6. Complainant / Informant
+                    </div>
+
+                    <div class="fir-grid">
+
+                        <div>
+                            <label>Name</label>
+
+                            <input
+                                id="complainantName"
+                                class="officer-input"
+                                placeholder="Enter complainant name"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>
+                                Father's / Husband's Name
+                            </label>
+
+                            <input
+                                id="fatherName"
+                                class="officer-input"
+                                placeholder="Enter father's / husband's name"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Date / Year of Birth</label>
+
+                            <input
+                                id="dateOfBirth"
+                                class="officer-input"
+                                placeholder="Enter date / year of birth"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Nationality</label>
+
+                            <input
+                                id="nationality"
+                                class="officer-input"
+                                placeholder="Enter nationality"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>UID Number</label>
+
+                            <input
+                                id="uid"
+                                class="officer-input"
+                                placeholder="Enter UID number"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Passport Number</label>
+
+                            <input
+                                id="passport"
+                                class="officer-input"
+                                placeholder="Enter passport number"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Occupation</label>
+
+                            <input
+                                id="occupation"
+                                class="officer-input"
+                                placeholder="Enter occupation"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Phone Number</label>
+
+                            <input
+                                id="phone"
+                                class="officer-input"
+                                placeholder="Enter phone number"
+                            >
+                        </div>
+
+
+                        <div>
+                            <label>Mobile Number</label>
+
+                            <input
+                                id="mobile"
+                                class="officer-input"
+                                placeholder="Enter mobile number"
+                            >
+                        </div>
+
+
+                        <div class="wide">
+
+                            <label>
+                                Address
+                            </label>
+
+                            <textarea
+                                id="address"
+                                class="officer-input"
+                                placeholder="Enter complainant address"
+                            ></textarea>
+
+                        </div>
+
+
+                        <div class="wide">
+
+                            <label>
+                                ID Details
+                            </label>
+
+                            <textarea
+                                id="idDetails"
+                                class="officer-input"
+                                placeholder="Enter ID details"
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- 7 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        7. Details of Known / Suspected /
+                        Unknown Accused
+                    </div>
+
+                    <table class="official-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Name</th>
+                                <th>Alias</th>
+                                <th>Address / Details</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>1</td>
+
+                                <td>
+                                    <input
+                                        id="accusedName"
+                                        class="officer-input"
+                                        placeholder="Enter accused name"
+                                    >
+                                </td>
+
+                                <td>
+                                    <input
+                                        id="accusedAlias"
+                                        class="officer-input"
+                                        placeholder="Enter alias"
+                                    >
+                                </td>
+
+                                <td>
+                                    <textarea
+                                        id="accusedAddress"
+                                        class="officer-input"
+                                        placeholder="Enter accused address / details"
+                                    ></textarea>
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </section>
+
+
+                <!-- 8 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        8. Reasons for Delay in Reporting
+                    </div>
+
+                    <textarea
+                        id="delayReason"
+                        class="officer-input"
+                        placeholder="Enter reason for delay, if applicable"
+                    ></textarea>
+
+                </section>
+
+
+                <!-- 9 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        9. Particulars of Property Stolen / Involved
+                    </div>
+
+                    <table class="official-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Sr. No.</th>
+                                <th>Property Category</th>
+                                <th>Property Type</th>
+                                <th>Description</th>
+                                <th>Value</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+
+                                <td>1</td>
+
+                                <td>
+                                    <input
+                                        id="propertyCategory"
+                                        class="officer-input"
+                                        placeholder="Enter category"
+                                    >
+                                </td>
+
+                                <td>
+                                    <input
+                                        id="propertyType"
+                                        class="officer-input"
+                                        placeholder="Enter type"
+                                    >
+                                </td>
+
+                                <td>
+                                    <textarea
+                                        id="propertyDescription"
+                                        class="officer-input"
+                                        placeholder="Enter description"
+                                    ></textarea>
+                                </td>
+
+                                <td>
+                                    <input
+                                        id="propertyValue"
+                                        class="officer-input"
+                                        placeholder="Enter value"
+                                    >
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </section>
+
+
+                <!-- 10 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        10. Total Value of Property
+                    </div>
+
+                    <input
+                        id="totalPropertyValue"
+                        class="officer-input"
+                        placeholder="Enter total property value"
+                    >
+
+                </section>
+
+
+                <!-- 11 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        11. Inquest Report / U.D. Case No.
+                    </div>
+
+                    <input
+                        id="inquest"
+                        class="officer-input"
+                        placeholder="Enter Inquest Report / U.D. Case No."
+                    >
+
+                </section>
+
+
+                <!-- 12 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        12. First Information Contents
+                    </div>
+
+                    <textarea
+                        id="firstInformationContents"
+                        class="fir-narrative officer-input"
+                        placeholder="The complainant's statement will appear here exactly as transcribed."
+                    ></textarea>
+
+                    <div class="fir-note">
+                        The complainant's original narrative is preserved.
+                        No automatic correction or rewriting is performed.
+                    </div>
+
+                </section>
+
+
+                <!-- 13 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        13. Action Taken
+                    </div>
+
+                    <textarea
+                        id="actionTaken"
+                        class="officer-input"
+                        placeholder="Enter action taken by the police officer"
+                    ></textarea>
+
+                </section>
+
+
+                <!-- 14 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        14. Signature / Thumb Impression of
+                        Complainant / Informant
+                    </div>
+
+                    <div class="signature-grid">
+
+                        <div>
+
+                            <label>
+                                Officer Name
+                            </label>
+
+                            <input
+                                id="officerName"
+                                class="officer-input"
+                                placeholder="Enter officer name"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                Rank
+                            </label>
+
+                            <input
+                                id="officerRank"
+                                class="officer-input"
+                                placeholder="Enter rank"
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                ID / Buckle No.
+                            </label>
+
+                            <input
+                                id="officerId"
+                                class="officer-input"
+                                placeholder="Enter ID / Buckle No."
+                            >
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                Date
+                            </label>
+
+                            <input
+                                id="officerDate"
+                                readonly
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="signature-box-area">
+
+                        <div>
+
+                            <label>
+                                Officer Signature
+                            </label>
+
+                            <div class="signature-box">
+                            </div>
+
+                        </div>
+
+
+                        <div>
+
+                            <label>
+                                Police Station Stamp
+                            </label>
+
+                            <div class="stamp-box">
+                                OFFICIAL STAMP
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- 15 -->
+
+                <section class="fir-item">
+
+                    <div class="fir-item-title">
+                        15. Date and Time of Dispatch to the Court
+                    </div>
+
+                    <input
+                        id="dispatchDateTime"
+                        readonly
+                        placeholder="Generated as per procedure"
+                    >
+
+                </section>
+
+            </div>
+
+
+            <!-- ==================================================
+                 OFFICER REVIEW
+            =================================================== -->
+
+            <div class="iv-review-panel">
+
+                <div class="iv-review-header">
+
+                    <div>
+
+                        <span class="iv-section-number">
+                            STEP 4
+                        </span>
+
+                        <h2>
+                            Officer Review
+                        </h2>
+
+                        <p>
+                            Verify the AI-assisted FIR draft before
+                            final registration.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="missingInformationBox"
+                    class="iv-missing-box"
+                    style="display:none;"
+                >
+
+                    <h3>
+                        ⚠ Missing / Incomplete Information
+                    </h3>
+
+                    <ul id="missingInformationList">
+                    </ul>
+
+                </div>
+
+
+                <div
+                    id="reviewStatus"
+                    class="review-status"
+                ></div>
+
+
+                <div class="review-buttons">
+
+                    <button
+                        type="button"
+                        id="rejectButton"
+                        class="reject-btn"
+                    >
+                        Reject & Start New Complaint
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="approveButton"
+                        class="approve-btn"
+                    >
+                        ✓ Approve FIR
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==================================================
+                 FINAL APPROVAL
+            =================================================== -->
+
+            <div
+                id="finalSection"
+                class="iv-final-section"
+                style="display:none;"
+            >
+
+                <div class="approved-banner">
+                    ✓ FIR APPROVED
+                </div>
+
+
+                <h2>
+                    Final FIR Registered
+                </h2>
+
+
+                <div class="final-details">
+
+                    <div>
+                        <span>
+                            FIR Number
+                        </span>
+
+                        <strong id="finalFirNumber">
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>
+                            FIR Date & Time
+                        </span>
+
+                        <strong id="finalFirDateTime">
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="printButton"
+                    class="print-btn"
+                >
+                    🖨 Print Final FIR
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script
+    src="{{ url_for('static', filename='js/script.js') }}?v=20261003"
+></script>
+</body>
+</html>
